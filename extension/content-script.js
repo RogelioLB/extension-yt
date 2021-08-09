@@ -48,9 +48,6 @@ const getData = async(url) =>{
     createButton(format720,"Video")
     const format480 = formatsVideo.find((format)=>format.quality === "480p" || format.quality === "hd480")
     createButton(format480,"Video")
-
-    const medium = formatsAudio.find((format)=>format.quality === "medium")
-    createButton(medium,"Audio")
     const tiny = formatsAudio.find((format)=>format.quality === "tiny")
     createButton(tiny,"Audio")
 }
@@ -65,6 +62,7 @@ const createButton = (format,type) =>{
 
     const btn = document.querySelectorAll("button")[document.querySelectorAll("button").length-1]
         btn.addEventListener("click",async()=>{
+            console.log("http://localhost:3000/download/"+type.toLowerCase())
             const itag = btn.getAttribute("data");
             const res = await fetch("http://localhost:3000/download/"+type.toLowerCase(),{
                 method:"POST",

@@ -5,7 +5,6 @@ const parserTitles = require('../utils/parserTitles')
 const fs = require('fs');
 const ffmpeg = require('ffmpeg-static')
 const cp = require('child_process');
-const readline = require('readline');
 
 route.post("/audio",async(req,res)=>{
     const io = req.app.get("io")
