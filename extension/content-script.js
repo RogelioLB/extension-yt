@@ -46,7 +46,7 @@ const getData = async(url) =>{
     createButton(format1080,"Video")
     const format720 = formatsVideo.find((format)=>format.quality === "720p" || format.quality === "hd720")
     createButton(format720,"Video")
-    const format480 = formatsVideo.find((format)=>format.quality === "480p" || format.quality === "hd480")
+    const format480 = formatsVideo.find((format)=>format.quality === "large" || format.quality === "hd480")
     createButton(format480,"Video")
     const tiny = formatsAudio.find((format)=>format.quality === "tiny")
     createButton(tiny,"Audio")
@@ -56,7 +56,7 @@ const getData = async(url) =>{
 const createButton = (format,type) =>{
     if(!format) return;
 
-    const button = `<button data=${format.itag}>${format.quality}</button>`
+    const button = `<button data=${format.itag}>${format.quality=="large" ? format.qualityLabel : format.quality}</button>`
 
     document.getElementById("formats"+type).innerHTML += button;
 
