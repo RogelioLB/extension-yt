@@ -9,17 +9,17 @@ const readline = require('readline');
 
 route.post("/audio",async(req,res)=>{
     const io = req.app.get("io")
-    const {url} = req.body;
+    const {url,itag} = req.body;
     const {title} = await (await ytdl.getInfo(url)).videoDetails
-    ytdl(url,{filter:"audioonly",quality:'highestaudio'}).on("progress",(_,downloaded,total)=>{
-        io.emit("progress",{downloaded:downloaded,total:total})
+    ytdl(url,{filter:"audio",quality:itag}).on("progress",(_,downloaded,total)=>{
+        io.emit("progress",{downloaded:(downloaded/total*100).toFixed(2)})
     }).on("end",()=>{
         io.emit("close")
     }).pipe(fs.createWriteStream(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp3`)))
     setTimeout(()=>{
         fs.rmSync(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp3`))
     },300000)
-    res.json({url:"http://localhost:3000/"+parserTitles(title)+".mp3"})
+    res.json({url:"http://localhost:3000/"+parserTitles(title)+".mp3",message:"Downloading..."})
 })
 
 route.post("/video",async (req,res)=>{
@@ -89,7 +89,6 @@ route.post("/video",async (req,res)=>{
 })
 
 route.post("/info",async(req,res)=>{
-    const io = req.get("io")
     const {url} = req.body;
     const data = await ytdl.getInfo(url)
     let formats= data.formats.map((format)=>({quality:format.qualityLabel,audioQuality:format.audioQuality,itag:format.itag,...format}))
