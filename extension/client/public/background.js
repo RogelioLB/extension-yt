@@ -5,5 +5,6 @@ try{
 
     main()
 }catch(err){
+    // eslint-disable-next-line no-undef
     main()
 }
