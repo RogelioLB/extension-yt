@@ -1,6 +1,6 @@
 # Download Videos From YouTube | Extension For Google Chrome
 
-Hello, everyone this is an extension for google chrome, that can download videos from YouTube. Quality 1080hd, 720hd y 480, in formats MP4 and MP3
+Hello, everyone this is an extension for google chrome, that can download videos from YouTube. Quality 1080hd, 720hd and 480, in formats MP4 and MP3
 
 ### Things that you are gonna need
 
