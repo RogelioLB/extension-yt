@@ -10,15 +10,20 @@ route.post("/audio",async(req,res)=>{
     const io = req.app.get("io")
     const {url,itag} = req.body;
     const {title} = await (await ytdl.getInfo(url)).videoDetails
-    ytdl(url,{filter:"audio",quality:itag}).on("progress",(_,downloaded,total)=>{
+    try{
+      ytdl(url,{filter:"audio",quality:itag}).on("progress",(_,downloaded,total)=>{
         io.emit("progress",{downloaded:(downloaded/total*100).toFixed(2)})
-    }).on("end",()=>{
-        io.emit("close")
-    }).pipe(fs.createWriteStream(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp3`)))
-    setTimeout(()=>{
-        fs.rmSync(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp3`))
-    },300000)
-    res.json({url:"http://localhost:3000/"+parserTitles(title)+".mp3",message:"Downloading..."})
+      }).on("end",()=>{
+          io.emit("close")
+          setTimeout(()=>{
+            fs.rmSync(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp3`))
+        },300000)
+      }).pipe(fs.createWriteStream(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp3`)))
+      res.json({url:"http://localhost:3000/"+parserTitles(title)+".mp3",message:"Downloading..."})
+    }catch(err){
+      io.emit('error', {message:"Error downloading. Please try again."})
+      res.json({message:"Error downloading. Please try again."})
+    }
 })
 
 route.post("/video",async (req,res)=>{
@@ -33,15 +38,15 @@ route.post("/video",async (req,res)=>{
         merged: { frame: 0, speed: '0x', fps: 0 },
       };
       
-      // Get audio and video streams
-    const audio = ytdl(url, { quality: 'highestaudio' }).on('progress', (_, downloaded, total) => {
-      tracker.audio = { downloaded, total };
-    });
-    const video = ytdl(url, { quality: itag }).on('progress', (_, downloaded, total) => {
-      tracker.video = { downloaded, total };
-    });
-    
-      // Start the ffmpeg child process
+    try{
+      const audio = ytdl(url, { quality: 'highestaudio' }).on('progress', (_, downloaded, total) => {
+        tracker.audio = { downloaded, total };
+      });
+      const video = ytdl(url, { quality: itag }).on('progress', (_, downloaded, total) => {
+        tracker.video = { downloaded, total };
+      });
+      
+        
       const ffmpegProcess = cp.spawn(ffmpeg, [
         '-loglevel', '8', '-hide_banner',
         '-progress', 'pipe:3',
@@ -83,17 +88,25 @@ route.post("/video",async (req,res)=>{
       audio.pipe(ffmpegProcess.stdio[4]);
       video.pipe(ffmpegProcess.stdio[5]);
       setTimeout(()=>fs.rmSync(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp4`)),300000)
-
-    res.json({message:"Downloading",url:"http://localhost:3000/"+parserTitles(title)+".mp4",title:parserTitles(title)+".mp4"})
+  
+      res.json({message:"Downloading",url:"http://localhost:3000/"+parserTitles(title)+".mp4",title:parserTitles(title)+".mp4"})
+    }catch(err){
+      io.emit("error",err)
+      res.json({message:"Error downloading. Please try again!"})
+    }
 })
 
 route.post("/info",async(req,res)=>{
     const {url} = req.body;
-    const data = await ytdl.getInfo(url)
-    let formats= data.formats.map((format)=>({quality:format.qualityLabel,audioQuality:format.audioQuality,itag:format.itag,...format}))
-    let formatsVideo = formats.filter((format)=>format.hasVideo)
-    let formatsAudio = formats.filter((format)=>format.hasAudio)
-    res.json({data:data,formatsVideo:formatsVideo,formatsAudio:formatsAudio})
+    try{
+      const data = await ytdl.getInfo(url)
+      let formats= data.formats.map((format)=>({quality:format.qualityLabel,audioQuality:format.audioQuality,itag:format.itag,...format}))
+      let formatsVideo = formats.filter((format)=>format.hasVideo)
+      let formatsAudio = formats.filter((format)=>format.hasAudio)
+      res.json({data:data,formatsVideo:formatsVideo,formatsAudio:formatsAudio})
+    }catch(err){
+      res.json(err.message)
+    }
 })
 
 

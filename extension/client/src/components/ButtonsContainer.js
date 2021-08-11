@@ -16,15 +16,21 @@ const ButtonsContainer = ({formatsAudio,formatsVideo,url,setUrlResponse}) => {
         <div className="formatsContainer">
             <h2>MP4:</h2>
             <div className="formatsVideo">
-                {formatsVideo && formatsVideo.map((format,i)=>(
-                    <Button key={i} onClick={handleClick} itag={format.itag} type="video">{format.quality.toUpperCase() !== "LARGE" ? format.quality.toUpperCase() : "480"}</Button>
-                ))}
+                {formatsVideo && formatsVideo.map((format,i)=>{
+                    if(!format) return <></>
+                    return (
+                        <Button key={i} onClick={handleClick} itag={format.itag} type="video">{format.quality.toUpperCase() !== "LARGE" ? format.quality.toUpperCase() : "480"}</Button>
+                    )
+                })}
             </div>
             <h2>MP3:</h2>
             <div className="formatsAudio">
-                {formatsAudio && formatsAudio.map((format,i) =>(
-                    <Button key={i} onClick={handleClick} itag={format.itag} type="audio">{format.quality.toUpperCase()}</Button>
-                ))}
+                {formatsAudio && formatsAudio.map((format,i) =>{
+                    if(!format) return <></>
+                    return (
+                        <Button key={i} onClick={handleClick} itag={format.itag} type="audio">{format.quality.toUpperCase()}</Button>
+                    )
+                })}
             </div>
         </div>
     )

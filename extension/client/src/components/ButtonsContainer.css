@@ -9,10 +9,7 @@
 
 .formatsVideo,.formatsAudio{
     display:flex;
-    justify-content:space-between;
+    justify-content:space-around;
     align-items:center;
     width:80%;
-}
-.formatsAudio{
-    justify-content:space-around;
 }
