@@ -16,3 +16,18 @@ h1{
 h2{
   width:100%;
 }
+
+.switch-container{
+  display:flex;
+  align-items:center;
+  width:100%;
+}
+.container-percentages{
+  display:flex;
+  flex-wrap: wrap;
+  align-items:center;
+  justify-content:center;
+}
+.container-percentages > *{
+  margin: 20px 10px;
+}

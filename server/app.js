@@ -21,6 +21,7 @@ app.set("io",io)
 
 
 app.use("/download",require("./routes/download"))
+app.use("/playlist",require("./routes/playlist"))
 
 
 server.listen(3000,()=>console.log("Listen on port 3000"))

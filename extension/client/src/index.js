@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import VideoContextProvider from './context/VideoContext';
+import PlaylistContextProvider from './context/PlaylistContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <VideoContextProvider>
+      <PlaylistContextProvider>
+        <App />
+      </PlaylistContextProvider>
+    </VideoContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

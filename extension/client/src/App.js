@@ -1,35 +1,26 @@
 /* global chrome */
-import React, { useState, useEffect} from 'react'
+import React, { useState, useContext} from 'react'
 import Loader from './components/Loader'
-import { useVideo } from './hooks/useVideo'
-import {io} from 'socket.io-client'
 import './App.css'
-import ButtonsContainer from './components/ButtonsContainer'
+import Switch from './components/Switch'
+import {socket} from './Socket'
+import { VideoContext } from './context/VideoContext'
+import Video from './components/Video'
+import Playlist from './components/Playlist'
 
-let response;
-const socket = io("http://localhost:3000",{
-  transports:["websocket"],
-});
-
-socket.on("close",()=>{
+// eslint-disable-next-line no-unused-vars
+socket.on("close",({url,title})=>{
+  alert("Downloaded "+ title)
   chrome.downloads.download({
-    url:response
+    url:url
   })
 })
 
 const App = () => {
-  const {title,loading,src,formatsAudio,formatsVideo,url,urlResponse,setUrlResponse} = useVideo()
-  const [percentage,setPercentage] = useState(null)
+  const [playlist,setPlaylist] = useState(false)
+  const {loading} = useContext(VideoContext)
 
   socket.on("connect",()=>console.log("Connected with id " +socket.id))
-
-  socket.on("progress",(data)=>{
-    setPercentage(data.downloaded)
-  })
-
-  useEffect(()=>{
-    response=urlResponse
-  },[urlResponse])
 
   return (
     <div className="app">
@@ -37,10 +28,11 @@ const App = () => {
       :
       (
         <>
-          <h1>{title}</h1>
-          <img src={src.url} alt={title}/>
-          <ButtonsContainer formatsAudio={formatsAudio} formatsVideo={formatsVideo} url={url} setUrlResponse={setUrlResponse}/>
-          {percentage && (<h3>{percentage}%</h3>)}
+          <div className="switch-container">
+            <h3>¿Playlist?</h3>
+            <Switch onChange={setPlaylist} value={playlist}/>
+          </div>
+          {!playlist ? <Video /> : <Playlist />}
         </>
       )
       }
