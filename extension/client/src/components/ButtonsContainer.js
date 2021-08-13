@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React from 'react'
+import { toast } from 'react-toastify'
 import Button from './Button'
 import "./ButtonsContainer.css"
 
@@ -8,6 +9,7 @@ const ButtonsContainer = ({formatsAudio,formatsVideo,url,setUrlResponse}) => {
         setLoading(true)
         const res =await axios.post("http://localhost:3000/download/"+type,JSON.stringify({itag:itag,url:url}),{headers:{"Content-Type": "application/json"}})
         const data = res.data;
+        toast(`Downloading ${data.title}`)
         setUrlResponse(data.url)
         setLoading(false)
     }

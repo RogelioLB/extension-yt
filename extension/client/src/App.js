@@ -7,13 +7,15 @@ import {socket} from './Socket'
 import { VideoContext } from './context/VideoContext'
 import Video from './components/Video'
 import Playlist from './components/Playlist'
+import {ToastContainer,toast} from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 
 // eslint-disable-next-line no-unused-vars
 socket.on("close",({url,title})=>{
-  alert("Downloaded "+ title)
-  chrome.downloads.download({
+  toast(`Successfully downloaded ${title}`)
+  /*chrome.downloads.download({
     url:url
-  })
+  })*/
 })
 
 const App = () => {
@@ -32,7 +34,8 @@ const App = () => {
             <h3>¿Playlist?</h3>
             <Switch onChange={setPlaylist} value={playlist}/>
           </div>
-          {!playlist ? <Video /> : <Playlist />}
+          {!playlist ? <Video /> : <Playlist setPlaylist={setPlaylist}/>}
+          <ToastContainer limit={3}/>
         </>
       )
       }
