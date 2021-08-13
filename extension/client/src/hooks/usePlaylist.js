@@ -14,12 +14,11 @@ export const usePlaylist = () =>{
     useEffect(()=>{
         let url;
         // eslint-disable-next-line no-undef
-        /*chrome.tabs.executeScript(null,{file:"background.js"},(arr)=>{
+        chrome.tabs.executeScript(null,{file:"background.js"},(arr)=>{
             url = arr[0]
             if(!url.includes("https://www.youtube.com/watch")) alert("Need to be in a youtube video")
             getInfo(url)
-        })*/
-        getInfo("https://www.youtube.com/watch?v=sDGVmJx5RC8&list=RDMM&start_radio=1&rv=lwDJ5nDn_5A&ab_channel=4x3Oficial")
+        })
     },[])
     
     const getInfo = async(url) =>{

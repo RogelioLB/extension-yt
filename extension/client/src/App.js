@@ -13,9 +13,9 @@ import "react-toastify/dist/ReactToastify.css"
 // eslint-disable-next-line no-unused-vars
 socket.on("close",({url,title})=>{
   toast(`Successfully downloaded ${title}`)
-  /*chrome.downloads.download({
+  chrome.downloads.download({
     url:url
-  })*/
+  })
 })
 
 const App = () => {
