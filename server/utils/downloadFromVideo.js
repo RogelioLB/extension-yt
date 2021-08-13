@@ -41,7 +41,7 @@ const downloadFromVideo = (res,url,title,io,itag) =>{
         ],
       });
       ffmpegProcess.on('close', () => {
-        io.emit("close",{url:"http://localhost:3000/"+parserTitles(title)+".mp4"})
+        io.emit("close",{url:"http://localhost:3000/"+parserTitles(title)+".mp4",title:parserTitles(title)})
       });
       
       // Link streams
