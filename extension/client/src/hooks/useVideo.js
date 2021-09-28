@@ -15,18 +15,19 @@ export const useVideo = () =>{
     const getInfo = async(url) =>{
         setLoading(true)
         setUrl(url)
-        const res = await axios.post("http://localhost:3000/download/info",JSON.stringify({url:url}),{headers: {'Content-Type': 'application/json'}})
+        const res = await axios.post("http://localhost:9000/download/info",JSON.stringify({url:url}),{headers: {'Content-Type': 'application/json'}})
         const data = res.data;
-        const thumb = data.data.videoDetails.thumbnails[3]
-        setTitle(data.data.videoDetails.title)
+        console.log(data)
+        const thumb = data.data.thumbnails[3]
+        setTitle(data.title)
         setSrc(thumb);
         const formatsVideo = data.formatsVideo;
         const formatsAudio = data.formatsAudio;
         const format1080 = formatsVideo.find((format)=>format.quality === "1080p" || format.quality === "hd1080")
         const format720 = formatsVideo.find((format)=>format.quality === "720p" || format.quality === "hd720")
         const format480 = formatsVideo.find((format)=>format.quality === "large" || format.quality === "hd480")
-        const medium = formatsAudio.find((format)=>format.quality === "medium") 
-        const tiny = formatsAudio.find((format)=>format.quality === "tiny")
+        const medium = formatsAudio.find((format)=>format.audioQuality === "AUDIO_QUALITY_MEDIUM") 
+        const tiny = formatsAudio.find((format)=>format.audioQuality === "AUDIO_QUALITY_LOW")
         setFormatsVideo([format1080,format720,format480])
         setFormatsAudio([medium,tiny])
         setLoading(false)

@@ -25,7 +25,7 @@ export const usePlaylist = () =>{
         try{
             setLoading(true)
             setUrl(url)
-            const res = await axios.post("http://localhost:3000/playlist",JSON.stringify({url:url}),{headers:{"Content-Type": "application/json"}});
+            const res = await axios.post("http://localhost:9000/playlist",JSON.stringify({url:url}),{headers:{"Content-Type": "application/json"}});
             console.log(res.data);
             const data = res.data;
             setError(data.error)

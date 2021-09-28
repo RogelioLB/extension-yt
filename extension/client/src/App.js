@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css"
 socket.on("close",({url,title})=>{
   toast(`Successfully downloaded ${title}`)
   chrome.downloads.download({
-    url:url
+    url:url.replace("3000","9000")
   })
 })
 

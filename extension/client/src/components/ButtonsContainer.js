@@ -7,7 +7,7 @@ import "./ButtonsContainer.css"
 const ButtonsContainer = ({formatsAudio,formatsVideo,url,setUrlResponse}) => {
     const handleClick = async(type,setLoading,itag) =>{
         setLoading(true)
-        const res =await axios.post("http://localhost:3000/download/"+type,JSON.stringify({itag:itag,url:url}),{headers:{"Content-Type": "application/json"}})
+        const res =await axios.post("http://localhost:9000/download/"+type,JSON.stringify({itag:itag,url:url}),{headers:{"Content-Type": "application/json"}})
         const data = res.data;
         toast(`Downloading ${data.title}`)
         setUrlResponse(data.url)
@@ -30,7 +30,7 @@ const ButtonsContainer = ({formatsAudio,formatsVideo,url,setUrlResponse}) => {
                 {formatsAudio && formatsAudio.map((format,i) =>{
                     if(!format) return <></>
                     return (
-                        <Button key={i} onClick={handleClick} itag={format.itag} type="audio">{format.quality.toUpperCase()}</Button>
+                        <Button key={i} onClick={handleClick} itag={format.itag} type="audio">{format.audioQuality.toUpperCase()}</Button>
                     )
                 })}
             </div>

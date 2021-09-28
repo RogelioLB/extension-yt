@@ -19,12 +19,13 @@ route.post("/video",async (req,res)=>{
 
 route.post("/info",async(req,res)=>{
     const {url} = req.body;
+    console.log(url)
     try{
       const data = await ytdl.getInfo(url)
-      let formats= data.formats.map((format)=>({quality:format.qualityLabel,audioQuality:format.audioQuality,itag:format.itag,...format}))
+      let formats= data.formats.map((format)=>({quality:format.qualityLabel,audioQuality:format.audioQuality,itag:format.itag,hasVideo:format.hasVideo,hasAudio:format.hasAudio}))
       let formatsVideo = formats.filter((format)=>format.hasVideo)
       let formatsAudio = formats.filter((format)=>format.hasAudio)
-      res.json({data:data,formatsVideo:formatsVideo,formatsAudio:formatsAudio})
+      res.json({data:data.videoDetails,formatsVideo:formatsVideo,formatsAudio:formatsAudio})
     }catch(err){
       res.json(err.message)
     }
