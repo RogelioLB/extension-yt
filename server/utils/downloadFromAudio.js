@@ -16,17 +16,28 @@ const downloadFromAudio = async(res,url,title,io,itag) =>{
         const info = await ytdl.getBasicInfo(url);
         const stream = ytdl(url,{filter:"audio",quality:itag});
         const pathname = path.join(__dirname,`../public/downloads/${parserTitles(title)}.mp3`)
-        ffmpeg(stream).audioBitrate(128).save(pathname).on("progress", p=>{
-          io.emit("progress",{downloaded:p.percent})
-          console.log(p)
-        }).on("end",()=>{
-          io.emit("close",{url:"http://localhost:3000/"+parserTitles(title)+".mp3",title:parserTitles(title)+".mp3"})
+        ffmpeg(stream).audioBitrate(128).save(pathname).on('stderr', function(line) {
+          if (line.trim().startsWith('Duration')) {
+              var match = line.trim().match(/Duration:\s\d\d\:\d\d:\d\d/).toString().split('Duration:').slice(1).toString().split(':');
+              duration = +match[0] * 60 * 60 + +match[1] * 60 + +match[2];
+          } else if (line.trim().startsWith('size=')) {
+              match = line.trim().match(/time=\d\d\:\d\d:\d\d/).toString().split('time=').slice(1).toString().split(':');
+              var seconds = +match[0] * 60 * 60 + +match[1] * 60 + +match[2];
+              percent = seconds / duration;
+              percent = (percent * 100).toFixed()
+              console.log(`stderr: ${line}`)
+              console.log(`${percent}%`)
+              io.emit("progress",{downloaded:percent})
+          }
+      }).on("end",()=>{
           const options = {
             artist:info.videoDetails.author.name,
-            title:info.videoDetails.title
+            title:info.videoDetails.title,
+            album:info.videoDetails.author.name
           }
           metadata.write(pathname,options,(err)=>{
             if(err) throw err;
+            io.emit("close",{url:"http://localhost:3000/"+parserTitles(title)+".mp3",title:parserTitles(title)+".mp3"})
           });
           setTimeout(()=>fs.rmSync(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp3`)),300000)
         })
