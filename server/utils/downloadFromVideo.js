@@ -58,6 +58,7 @@ const downloadFromVideo = (res,url,title,io,itag) =>{
         const percentageAudio = (tracker.audio.downloaded / tracker.audio.total)
         const percentageVideo = (tracker.video.downloaded / tracker.video.total)
         const total = ((percentageVideo)+(percentageAudio))/2*100
+        console.log(total);
         io.emit("progress",{downloaded:total.toFixed(2)})
       });
       audio.pipe(ffmpegProcess.stdio[4]);
