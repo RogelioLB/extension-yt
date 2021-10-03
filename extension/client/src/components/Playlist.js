@@ -24,7 +24,7 @@ const Playlist = ({setPlaylist}) => {
 
     const handleClick = async (setLoading) =>{
         setLoading(true);
-        const res = await axios.post("http://localhost:3000/playlist/download",JSON.stringify({urlPlaylist:url,index:index,end:end,id:socket.id}),{headers:{"Content-Type": "application/json"}})
+        const res = await axios.post("http://localhost:9000/playlist/download",JSON.stringify({urlPlaylist:url,index:index,end:end,id:socket.id}),{headers:{"Content-Type": "application/json"}})
         toast(`Downloading ${res.data.allItems} from ${res.data.total}`)
         setLoading(false)
     }

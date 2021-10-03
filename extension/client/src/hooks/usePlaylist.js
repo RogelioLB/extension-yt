@@ -14,7 +14,7 @@ export const usePlaylist = () =>{
     useEffect(()=>{
         let url;
         // eslint-disable-next-line no-undef
-        chrome.tabs.executeScript(null,{file:"background.js"},(arr)=>{
+        browser.tabs.executeScript(null,{file:"background.js"},(arr)=>{
             url = arr[0]
             if(!url.includes("https://www.youtube.com/watch")) alert("Need to be in a youtube video")
             getInfo(url)

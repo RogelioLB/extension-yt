@@ -1,4 +1,4 @@
-/* global chrome */
+/* global browser */
 import axios from "axios";
 import { useEffect, useState } from "react"
 
@@ -35,7 +35,7 @@ export const useVideo = () =>{
 
     useEffect(()=>{
         let url;
-        chrome.tabs.executeScript(null,{file:"background.js"},(arr)=>{
+        browser.tabs.executeScript(null,{file:"background.js"},(arr)=>{
             url = arr[0]
             if(!url.includes("https://www.youtube.com/watch")) alert("Need to be in a youtube video")
             getInfo(url)
