@@ -42,7 +42,7 @@ const downloadPlaylist = async(url,title,io,itag,room,i) =>{
       });
 
       ffmpegProcess.on('close', () => {
-        io.to(room).emit("close",{url:"http://localhost:3000/"+parserTitles(title)+".mp4",title:title})
+        io.to(room).emit("close",{url:"https://api-yt-downloader.herokuapp.com/"+parserTitles(title)+".mp4",title:title})
       });
     
       // Link streams

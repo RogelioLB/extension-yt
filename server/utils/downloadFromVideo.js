@@ -41,7 +41,7 @@ const downloadFromVideo = (res,url,title,io,itag) =>{
         ],
       });
       ffmpegProcess.on('close', () => {
-        io.emit("close",{url:"http://localhost:3000/"+parserTitles(title)+".mp4",title:parserTitles(title)})
+        io.emit("close",{url:"https://api-yt-downloader.herokuapp.com/"+parserTitles(title)+".mp4",title:parserTitles(title)})
       });
       
       // Link streams
@@ -64,7 +64,7 @@ const downloadFromVideo = (res,url,title,io,itag) =>{
       video.pipe(ffmpegProcess.stdio[5]);
       setTimeout(()=>fs.rmSync(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp4`)),300000)
   
-      res.json({message:"Downloading",url:"http://localhost:3000/"+parserTitles(title)+".mp4",title:parserTitles(title)+".mp4"})
+      res.json({message:"Downloading",url:"https://api-yt-downloader.herokuapp.com/"+parserTitles(title)+".mp4",title:parserTitles(title)+".mp4"})
     }catch(err){
       io.emit("error",err)
       res.json({message:"Error downloading. Please try again!"})

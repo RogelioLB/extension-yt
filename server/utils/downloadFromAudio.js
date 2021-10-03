@@ -37,11 +37,11 @@ const downloadFromAudio = async(res,url,title,io,itag) =>{
           }
           metadata.write(pathname,options,(err)=>{
             if(err) throw err;
-            io.emit("close",{url:"http://localhost:3000/"+parserTitles(title)+".mp3",title:parserTitles(title)+".mp3"})
+            io.emit("close",{url:"https://api-yt-downloader.herokuapp.com/"+parserTitles(title)+".mp3",title:parserTitles(title)+".mp3"})
           });
           setTimeout(()=>fs.rmSync(path.resolve(__dirname,`../public/downloads/${parserTitles(title)}.mp3`)),300000)
         })
-        res.json({url:"http://localhost:3000/"+parserTitles(title)+".mp3",message:"Downloading...",title:parserTitles(title)+".mp3"})
+        res.json({url:"https://api-yt-downloader.herokuapp.com/"+parserTitles(title)+".mp3",message:"Downloading...",title:parserTitles(title)+".mp3"})
     }catch(err){
       console.log(err)
       io.emit('error', {message:"Error downloading. Please try again."})
