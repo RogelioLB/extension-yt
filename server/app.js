@@ -24,4 +24,4 @@ app.use("/download",require("./routes/download"))
 app.use("/playlist",require("./routes/playlist"))
 
 
-server.listen(process.env.PORT || 3000,()=>console.log("Listen on port "+process.env.PORT || 3000))
+server.listen(3000,()=>console.log("Listen on port "+3000))
